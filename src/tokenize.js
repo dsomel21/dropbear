@@ -3,9 +3,50 @@ const {
   isWhitespace,
   isNumber,
   isParenthesis,
-  isQuote,
-} = require('./identify');
+  isQuote
+} = require('./identify')
 
-const tokenize = () => {};
+const tokenize = input => {
+  const tokens = []
+  let cursor = 0
 
-module.exports = { tokenize };
+  while (cursor < input.length) {
+    const character = input[cursor]
+
+    if (isParenthesis(character)) {
+      tokens.push({
+        type: 'Parenthesis',
+        value: character
+      })
+    }
+    cursor++
+    continue
+
+    // Ignore all whitespace
+    if (isWhitespace(character)) {
+      cursor++
+      continue
+    }
+
+    if (isNumber(character)) {
+      let number
+      while (isNumber(input[++cursor])) {
+        number += input[cursor]
+      }
+
+      tokens.push({
+        type: 'Number',
+        value: parseInt(number, 10)
+      })
+
+      cursor++
+      continue
+    }
+
+    throw new Error(`${character} is not valid!`)
+  }
+
+  return tokens
+}
+
+module.exports = { tokenize }
