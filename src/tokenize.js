@@ -18,9 +18,9 @@ const tokenize = input => {
         type: 'Parenthesis',
         value: character
       })
+      cursor++
+      continue
     }
-    cursor++
-    continue
 
     // Ignore all whitespace
     if (isWhitespace(character)) {
@@ -29,9 +29,11 @@ const tokenize = input => {
     }
 
     if (isNumber(character)) {
-      let number
-      while (isNumber(input[++cursor])) {
+      let number = ''
+
+      while (isNumber(input[cursor])) {
         number += input[cursor]
+        cursor++
       }
 
       tokens.push({
@@ -39,7 +41,6 @@ const tokenize = input => {
         value: parseInt(number, 10)
       })
 
-      cursor++
       continue
     }
 
